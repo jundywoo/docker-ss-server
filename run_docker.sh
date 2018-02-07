@@ -1,11 +1,22 @@
 #!/bin/bash
 
-name=$1
+sss_file=$1
+name=$2
 
-if [[ $name == "" ]];  then
-  name="ss-server"
+if [[ ! -f $sss_file ]];  then
+  echo "Can find the server config file"
+  echo "  run_docker.sh <sss.json> [<docker name>]"
+  exit 1
 fi
 
-docker stop $name
-docker rm $name
-docker run -d --restart unless-stopped -v /home/ec2-user/sss.json:/tmp/sss.json -p 13348:13348 --name $name docker-ss-server
+port=`jq -r '.server_port' $sss_file`
+
+if [[ $name == "" ]]; then
+  name='ss-server'
+fi
+
+docker stop $name 2>&1 >> /dev/null
+docker rm $name 2>&1 >> /dev/null
+docker run -d --restart unless-stopped -v $sss_file:/tmp/sss.json -p $port:$port --name $name kennieng/docker-ss-server 2>&1 >> /dev/null
+
+echo "Started docker ss-server"
