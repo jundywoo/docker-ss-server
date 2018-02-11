@@ -4,7 +4,7 @@
 
 docker pull kennieng/docker-ss-server
 
-docker run -d --restart unless-stopped -v "&lt;port&gt;:&lt;port&gt;" --name "&lt;name&gt;" kennieng/docker-ss-server
+docker run -d --restart unless-stopped -p &lt;port&gt;:&lt;port&gt; -v &lt;sss.json&rt;:/tmp/sss.json  --name &lt;name&gt; kennieng/docker-ss-server
   
 ## Preparation
 
